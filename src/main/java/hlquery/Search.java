@@ -19,6 +19,31 @@ public class Search {
         this.collections = collections;
     }
 
+    public Response sql(String collectionName, String sql, Map<String, Object> params) {
+        Validator.validateCollectionName(collectionName);
+
+        if (sql == null || sql.trim().isEmpty()) {
+            throw new IllegalArgumentException("SQL query must be a non-empty string");
+        }
+
+        Map<String, String> queryParams = new HashMap<>();
+        if (params != null) {
+            for (Map.Entry<String, Object> entry : params.entrySet()) {
+                if (entry.getValue() != null) {
+                    queryParams.put(entry.getKey(), String.valueOf(entry.getValue()));
+                }
+            }
+        }
+        queryParams.put("sql", sql);
+
+        return request.execute(
+                "GET",
+                "/collections/" + URLEncoder.encode(collectionName, StandardCharsets.UTF_8) + "/documents/search",
+                null,
+                queryParams
+        );
+    }
+
     public Response search(String collectionName, Map<String, Object> params) {
         Validator.validateCollectionName(collectionName);
         

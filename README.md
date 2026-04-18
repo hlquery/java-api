@@ -6,12 +6,10 @@
 
 **A clean, idiomatic java client library for hlquery.**
 
-[![Twitter Follow](https://img.shields.io/twitter/url/https/x.com/hlquery.svg?style=social&label=Follow%20%40hlquery)](https://x.com/hlquery)
+[![Follow hlquery](https://img.shields.io/badge/Follow-%40hlquery-blue?logo=x&logoColor=white)](https://x.com/hlquery)
 [![Commit Activity](https://img.shields.io/github/commit-activity/m/hlquery/java-api)](https://github.com/hlquery/java-api/pulse)
-[![GitHub stars](https://img.shields.io/github/stars/hlquery/java-api?style=social)](https://github.com/hlquery/java-api/stargazers)
+[![java-api](https://img.shields.io/badge/GitHub-java--api-181717?logo=github&logoColor=white)](https://github.com/hlquery/java-api/stargazers)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
-
-[Documentation](https://docs.hlquery.com) • [hlquery](https://github.com/hlquery/hlquery) • [Discord](https://discord.hlquery.com)
 
 </div>
 
@@ -19,6 +17,8 @@
 # hlquery Java API Client
 
 A Java client library for the hlquery search engine.
+
+Supports collections, documents, search, vector search, and SQL helpers.
 
 ## Requirements
 
@@ -73,8 +73,42 @@ System.out.println(results.getRawBody());
         vectorRequest.put("body", vectorBody);
         Response vectorResults = client.vectorSearch("my_collection", vectorRequest);
         System.out.println(vectorResults.getRawBody());
+
+        // SQL search
+        Response sqlResults = client.sqlSearch(
+            "my_collection",
+            "SELECT id, title FROM my_collection ORDER BY title ASC LIMIT 3;"
+        );
+        System.out.println(sqlResults.getRawBody());
 }
 }
+```
+
+## SQL
+
+Basic SQL example:
+
+```java
+Client client = new Client("http://localhost:9200");
+
+Response response = client.sqlSearch(
+    "products",
+    "SELECT id, title, price FROM products ORDER BY price DESC LIMIT 5;"
+);
+
+if (response.isSuccess()) {
+    System.out.println(response.getRawBody());
+}
+```
+
+Top-level SQL execution:
+
+```java
+Response rows = client.sql("SHOW COLLECTIONS;");
+
+Response insert = client.execSql(
+    "INSERT INTO products (id, title, price) VALUES ('sku-9', 'Camp Stove', 89);"
+);
 ```
 
 ## Reduce Text Example
@@ -127,6 +161,9 @@ make examples-docs
 
 # Run search examples
 make examples-search
+
+# Run SQL examples
+make examples-sql
 ```
 
 ### Manual Execution (Without Make)
@@ -150,6 +187,9 @@ java -cp lib/json.jar:bin hlquery.examples.Documents
 
 # Search Examples
 java -cp lib/json.jar:bin hlquery.examples.Search
+
+# SQL Examples
+java -cp lib/json.jar:bin hlquery.examples.SQL
 ```
 
 ## Running Tests

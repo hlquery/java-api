@@ -11,7 +11,8 @@ for class in \
     hlquery.Example \
     hlquery.examples.Collections \
     hlquery.examples.Documents \
-    hlquery.examples.Search
+    hlquery.examples.Search \
+    hlquery.examples.SQL
 do
     printf '\n== Running %s ==\n' "$class"
     java -cp lib/json.jar:bin "$class"

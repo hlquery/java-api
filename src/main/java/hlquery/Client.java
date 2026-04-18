@@ -59,6 +59,33 @@ public class Client {
         return request.execute("GET", "/etc");
     }
 
+    public Response sql(String sql) {
+        return sql(sql, new HashMap<>());
+    }
+
+    public Response sql(String sql, Map<String, String> queryParams) {
+        if (sql == null || sql.trim().isEmpty()) {
+            throw new IllegalArgumentException("SQL query must be a non-empty string");
+        }
+
+        Map<String, String> params = new HashMap<>();
+        if (queryParams != null) {
+            params.putAll(queryParams);
+        }
+        params.put("sql", sql);
+        return request.execute("GET", "/sql", null, params);
+    }
+
+    public Response execSql(String sql) {
+        if (sql == null || sql.trim().isEmpty()) {
+            throw new IllegalArgumentException("SQL query must be a non-empty string");
+        }
+
+        JSONObject body = new JSONObject();
+        body.put("exec", sql);
+        return request.execute("POST", "/sql", body);
+    }
+
     public Response info() {
         return request.execute("GET", "/");
     }
@@ -149,6 +176,14 @@ public class Client {
 
     public Response search(String collectionName, Map<String, Object> params) {
         return search.search(collectionName, params);
+    }
+
+    public Response sqlSearch(String collectionName, String sql) {
+        return sqlSearch(collectionName, sql, new HashMap<>());
+    }
+
+    public Response sqlSearch(String collectionName, String sql, Map<String, Object> params) {
+        return search.sql(collectionName, sql, params);
     }
 
     public Response vectorSearch(String collectionName, Map<String, Object> params) {

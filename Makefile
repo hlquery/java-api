@@ -33,6 +33,9 @@ examples-docs: compile
 examples-search: compile
 	$(JAVA) -cp $(CLASSPATH) hlquery.examples.Search
 
+examples-sql: compile
+	$(JAVA) -cp $(CLASSPATH) hlquery.examples.SQL
+
 test: compile
 	$(JAVAC) -cp $(CLASSPATH) -d $(BIN_DIR) ../tests/ApiTest.java
 	$(JAVA) -cp $(CLASSPATH) ApiTest
