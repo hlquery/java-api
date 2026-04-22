@@ -30,7 +30,7 @@ Supports collections, documents, search, vector search, and SQL helpers.
 You can build the project using the provided Makefile:
 
 ```bash
-make
+$ make
 ```
 
 This will download the necessary `org.json` dependency and compile the source files.
@@ -39,6 +39,7 @@ This will download the necessary `org.json` dependency and compile the source fi
 
 ```java
 import hlquery.Client;
+import hlquery.utils.Config;
 import hlquery.Response;
 import org.json.JSONObject;
 import java.util.HashMap;
@@ -46,7 +47,7 @@ import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
-        Client client = new Client("http://localhost:9200");
+        Client client = new Client(Config.getDefaultBaseUrl());
         
         // Check health
         Response health = client.health();
@@ -89,7 +90,7 @@ System.out.println(results.getRawBody());
 Basic SQL example:
 
 ```java
-Client client = new Client("http://localhost:9200");
+Client client = new Client(Config.getDefaultBaseUrl());
 
 Response response = client.sqlSearch(
     "products",
@@ -150,19 +151,19 @@ You can run the provided examples using either `make` or direct Java commands.
 
 ```bash
 # Run the main quickstart example
-make example
+$ make example
 
 # Run collection management examples
-make examples-cols
+$ make examples-cols
 
 # Run document operation examples
-make examples-docs
+$ make examples-docs
 
 # Run search examples
-make examples-search
+$ make examples-search
 
 # Run SQL examples
-make examples-sql
+$ make examples-sql
 ```
 
 ### Manual Execution (Without Make)
@@ -176,28 +177,28 @@ javac -cp lib/json.jar -d bin $(find src/main/java -name "*.java")
 2. **Run a specific example**:
 ```bash
 # Main Example
-java -cp lib/json.jar:bin hlquery.Example
+$ java -cp lib/json.jar:bin hlquery.Example
 
 # Collections Examples
-java -cp lib/json.jar:bin hlquery.examples.Collections
+$ java -cp lib/json.jar:bin hlquery.examples.Collections
 
 # Documents Examples
-java -cp lib/json.jar:bin hlquery.examples.Documents
+$ java -cp lib/json.jar:bin hlquery.examples.Documents
 
 # Search Examples
-java -cp lib/json.jar:bin hlquery.examples.Search
+$ java -cp lib/json.jar:bin hlquery.examples.Search
 
 # SQL Examples
-java -cp lib/json.jar:bin hlquery.examples.SQL
+$ java -cp lib/json.jar:bin hlquery.examples.SQL
 ```
 
 ## Running Tests
 
 ```bash
 # Using Make
-make test
+$ make test
 
 # Manually
-javac -cp lib/json.jar:bin -d bin ../tests/ApiTest.java
-java -cp lib/json.jar:bin ApiTest
+$ javac -cp lib/json.jar:bin -d bin ../tests/ApiTest.java
+$ java -cp lib/json.jar:bin ApiTest
 ```

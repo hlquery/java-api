@@ -2,12 +2,13 @@ package hlquery;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import hlquery.utils.Config;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Example {
     public static void main(String[] args) {
-        String baseUrl = "http://localhost:9200";
+        String baseUrl = Config.getDefaultBaseUrl();
         Client client = new Client(baseUrl);
 
         System.out.println("=== hlquery Java API Example ===");

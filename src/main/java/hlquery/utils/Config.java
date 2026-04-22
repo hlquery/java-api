@@ -4,9 +4,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Config {
+    public static String getDefaultBaseUrl() {
+        String envUrl = System.getenv("HLQ_BASE_URL");
+        if (envUrl != null && !envUrl.isBlank()) {
+            return envUrl;
+        }
+
+        String legacyEnvUrl = System.getenv("HLQUERY_BASE_URL");
+        if (legacyEnvUrl != null && !legacyEnvUrl.isBlank()) {
+            return legacyEnvUrl;
+        }
+
+        return "http://localhost:9200";
+    }
+
     public static Map<String, Object> mergeDefaults(Map<String, Object> options) {
         Map<String, Object> defaults = new HashMap<>();
-        defaults.put("base_url", "http://localhost:9200");
+        defaults.put("base_url", getDefaultBaseUrl());
         defaults.put("timeout", 30);
         defaults.put("auth_method", "bearer");
 
