@@ -113,21 +113,20 @@ Response insert = client.execSql(
 
 ## Reduce Text Example
 
-If the `ai_search` module is enabled, you can use the raw request helper to summarize a stored document:
+You can use the raw request helper to call custom module routes directly:
 
 ```java
 Map<String, String> query = new HashMap<>();
-query.put("q", "summarize onboarding guide in docs");
-query.put("run", "true");
+query.put("q", "example query");
 
-Response summary = client.executeRequest(
+Response moduleResponse = client.executeRequest(
     "GET",
-    "/modules/ai_search/talk",
+    "/modules/<name>/<route>",
     null,
     query
 );
 
-System.out.println(summary.getRawBody());
+System.out.println(moduleResponse.getRawBody());
 ```
 
 ## Ranking Helpers
