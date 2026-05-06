@@ -178,6 +178,22 @@ public class Client {
         return search.search(collectionName, params);
     }
 
+    public Response samSearch(String collectionName, String query) {
+        return samSearch(collectionName, query, new HashMap<>());
+    }
+
+    public Response samSearch(String collectionName, String query, Map<String, Object> params) {
+        return search.samSearch(collectionName, query, params);
+    }
+
+    public Response samSearchAll(String query) {
+        return samSearchAll(query, new HashMap<>());
+    }
+
+    public Response samSearchAll(String query, Map<String, Object> params) {
+        return search.samSearchAll(query, params);
+    }
+
     public Response sqlSearch(String collectionName, String sql) {
         return sqlSearch(collectionName, sql, new HashMap<>());
     }

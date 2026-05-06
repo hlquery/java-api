@@ -8,22 +8,18 @@
 
 [![Follow hlquery](https://img.shields.io/badge/Follow-%40hlquery-blue?logo=x&logoColor=white)](https://x.com/hlquery)
 [![Commit Activity](https://img.shields.io/github/commit-activity/m/hlquery/java-api)](https://github.com/hlquery/java-api/pulse)
-[![java-api](https://img.shields.io/badge/GitHub-java--api-181717?logo=github&logoColor=white)](https://github.com/hlquery/java-api/stargazers)
+[![java-api](https://img.shields.io/badge/Follow-%40hlquery-blue?logo=x&logoColor=white)](https://github.com/hlquery/java-api/stargazers)
+[![GitHub](https://img.shields.io/badge/GitHub-hlquery-blue?logo=github&logoColor=white)](https://github.com/hlquery/hlquery/stargazers)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
 </div>
 
 
-# hlquery Java API Client
+### hlquery Java API Client
 
 A Java client library for the hlquery search engine.
 
-Supports collections, documents, search, vector search, and SQL helpers.
-
-## Requirements
-
-- Java 11 or higher
-- `curl` (to download dependencies)
+Supports collections, documents, search, vector search, SQL helpers, and SAM search helpers.
 
 ## Installation
 
@@ -81,8 +77,25 @@ System.out.println(results.getRawBody());
             "SELECT id, title FROM my_collection ORDER BY title ASC LIMIT 3;"
         );
         System.out.println(sqlResults.getRawBody());
+
+        // SAM search
+        Response samResults = client.samSearch("my_collection", "wireless keyboard");
+        System.out.println(samResults.getRawBody());
 }
 }
+```
+
+## SAM Search
+
+Use SAM when you want heuristic and LLM-expanded lookup through `/sam/search`.
+
+```java
+Response sam = client.samSearch("products", "nineteen");
+
+Map<String, Object> params = new HashMap<>();
+params.put("limit", 5);
+params.put("distributed", "on");
+Response samAll = client.samSearchAll("guide", params);
 ```
 
 ## SQL
@@ -190,15 +203,4 @@ $ java -cp lib/json.jar:bin hlquery.examples.Search
 
 # SQL Examples
 $ java -cp lib/json.jar:bin hlquery.examples.SQL
-```
-
-## Running Tests
-
-```bash
-# Using Make
-$ make test
-
-# Manually
-$ javac -cp lib/json.jar:bin -d bin ../tests/ApiTest.java
-$ java -cp lib/json.jar:bin ApiTest
 ```
