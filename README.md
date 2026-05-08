@@ -29,9 +29,7 @@ It is intended for JVM services, tools, and applications that want a straightfor
 
 ### Why choose it over raw HTTP?
 
-- Less repetitive URL, auth, and request-body code.
-- One client entry point for day-to-day hlquery tasks.
-- Easier to keep request formatting and error handling consistent.
+Choose the Java client over raw HTTP when you want less repetitive URL, auth, and request-body code, one client entry point for day-to-day hlquery tasks, and a simpler way to keep request formatting and error handling consistent.
 
 ### Install
 
@@ -128,25 +126,23 @@ Response moduleResponse = client.executeRequest(
 System.out.println(moduleResponse.getRawBody());
 ```
 
-### Running Examples
+### Contributing
 
-With `make`:
+We welcome contributions from the community! All contributions must be released under the BSD 3-Clause license.
 
-```bash
-make example
-make examples-search
-make examples-sql
-```
+### How to Contribute
 
-Manual execution:
+- Check existing [issues](https://github.com/hlquery/hlquery/issues) or create new ones
+- Contribute to client libraries (Node.js, Go, Java, Python, PHP, Ruby, Rust, Perl, C++)
+- Test and report bugs
+- Improve documentation
 
-```bash
-mkdir -p bin
-javac -cp lib/json.jar -d bin $(find src/main/java -name "*.java")
-java -cp lib/json.jar:bin hlquery.Example
-```
+### Community
 
-### Notes
+- 📖 [Documentation](https://docs.hlquery.com)
+- 🐦 [X (Twitter)](https://x.com/hlquery)
+- 📦 [GitHub](https://github.com/hlquery/hlquery)
 
-- See `src/main/java/hlquery/examples/` for focused examples.
-- The client supports vector search and ranking helpers in addition to the examples shown here.
+### License
+
+hlquery is licensed under the [BSD 3-Clause License](https://opensource.org/licenses/BSD-3-Clause).
