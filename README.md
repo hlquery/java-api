@@ -36,46 +36,10 @@ Choose the Java client over raw HTTP when you want less repetitive URL, auth, an
 Build with the included `Makefile`:
 
 ```bash
-make
+$ make
 ```
 
 This downloads the required `org.json` dependency and compiles the client sources.
-
-### Quick Start
-
-```java
-import hlquery.Client;
-import hlquery.Response;
-import hlquery.utils.Config;
-
-import java.util.HashMap;
-import java.util.Map;
-
-public class Main {
-    public static void main(String[] args) {
-        Client client = new Client(Config.getDefaultBaseUrl());
-
-        Response health = client.health();
-        System.out.println(health.getRawBody());
-
-        Map<String, Object> params = new HashMap<>();
-        params.put("q", "search term");
-        params.put("query_by", "title,content");
-
-        Response results = client.search("my_collection", params);
-        System.out.println(results.getRawBody());
-    }
-}
-```
-
-### Auth
-
-```java
-Client client = new Client("http://localhost:9200");
-
-client.setAuthToken("your_token_here", "bearer");
-client.setAuthToken("your_api_key_here", "api-key");
-```
 
 ### SAM
 
@@ -143,6 +107,3 @@ We welcome contributions from the community! All contributions must be released 
 - 🐦 [X (Twitter)](https://x.com/hlquery)
 - 📦 [GitHub](https://github.com/hlquery/hlquery)
 
-### License
-
-hlquery is licensed under the [BSD 3-Clause License](https://opensource.org/licenses/BSD-3-Clause).
