@@ -16,7 +16,7 @@
 
 ### What is the hlquery Java API?
 
-The hlquery Java API is the official Java client for hlquery. It wraps hlquery's HTTP/JSON endpoints in a single client object with helpers for collections, documents, search, vector search, SQL, and SAM.
+The hlquery Java API is the official Java client for [hlquery](https://github.com/hlquery/hlquery). It wraps hlquery's HTTP/JSON endpoints in a single client object with helpers for collections, documents, search, vector search, SQL, and SAM.
 
 It is intended for JVM services, tools, and applications that want a straightforward hlquery integration layer instead of manual request construction.
 
@@ -106,4 +106,3 @@ We welcome contributions from the community! All contributions must be released 
 - 📖 [Documentation](https://docs.hlquery.com)
 - 🐦 [X (Twitter)](https://x.com/hlquery)
 - 📦 [GitHub](https://github.com/hlquery/hlquery)
-
