@@ -247,7 +247,12 @@ public class Search {
 
     private String formatCommaSeparated(Object obj) {
         if (obj instanceof List) {
-            return String.join(",", (List<String>) obj);
+            List<?> list = (List<?>) obj;
+            String[] parts = new String[list.size()];
+            for (int i = 0; i < list.size(); i++) {
+                parts[i] = String.valueOf(list.get(i));
+            }
+            return String.join(",", parts);
         } else if (obj instanceof JSONArray) {
             JSONArray arr = (JSONArray) obj;
             String[] parts = new String[arr.length()];
@@ -259,14 +264,16 @@ public class Search {
 
     private String formatSort(Object sort) {
         if (sort instanceof List) {
-            List<Object> list = (List<Object>) sort;
+            List<?> list = (List<?>) sort;
             StringBuilder sb = new StringBuilder();
             for (Object item : list) {
                 if (sb.length() > 0) sb.append(",");
                 if (item instanceof Map) {
-                    Map<String, String> map = (Map<String, String>) item;
-                    for (Map.Entry<String, String> entry : map.entrySet()) {
-                        sb.append("desc".equalsIgnoreCase(entry.getValue()) ? "-" : "").append(entry.getKey());
+                    Map<?, ?> map = (Map<?, ?>) item;
+                    for (Map.Entry<?, ?> entry : map.entrySet()) {
+                        String key = String.valueOf(entry.getKey());
+                        String value = String.valueOf(entry.getValue());
+                        sb.append("desc".equalsIgnoreCase(value) ? "-" : "").append(key);
                     }
                 } else {
                     sb.append(item);

@@ -10,6 +10,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.Collections;
 import java.util.Map;
 import java.util.StringJoiner;
 
@@ -42,10 +43,16 @@ public class Request {
             if (queryParams != null && !queryParams.isEmpty()) {
                 StringJoiner joiner = new StringJoiner("&", "?", "");
                 for (Map.Entry<String, String> entry : queryParams.entrySet()) {
+                    if (entry.getKey() == null || entry.getValue() == null) {
+                        continue;
+                    }
                     joiner.add(URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8) + "=" +
                             URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8));
                 }
-                url += joiner.toString();
+                String query = joiner.toString();
+                if (!"?".equals(query)) {
+                    url += query;
+                }
             }
 
             HttpRequest.Builder builder = HttpRequest.newBuilder()
@@ -84,6 +91,73 @@ public class Request {
 
         } catch (Exception e) {
             throw new RuntimeException("Request failed: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Non-throwing request variant. On failure, returns a Response with statusCode=0
+     * and a small JSON error payload in the body.
+     */
+    public Response executeSafe(String method, String path, Object body, Map<String, String> queryParams) {
+        try {
+            return execute(method, path, body, queryParams);
+        } catch (Exception e) {
+            String message = e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName();
+            String json = new JSONObject()
+                    .put("error", "Request failed")
+                    .put("message", message)
+                    .toString();
+            return new Response(0, json, Collections.emptyMap());
+        }
+    }
+
+    /**
+     * Simple retry helper for transient failures. Retries on exceptions and on 502/503/504.
+     */
+    public Response executeWithRetry(
+            String method,
+            String path,
+            Object body,
+            Map<String, String> queryParams,
+            int maxRetries,
+            long initialBackoffMillis
+    ) {
+        if (maxRetries < 0) {
+            throw new IllegalArgumentException("maxRetries must be >= 0");
+        }
+        if (initialBackoffMillis < 0) {
+            throw new IllegalArgumentException("initialBackoffMillis must be >= 0");
+        }
+
+        long backoff = initialBackoffMillis;
+        int attempts = 0;
+        while (true) {
+            try {
+                Response response = execute(method, path, body, queryParams);
+                int code = response.getStatusCode();
+                if ((code == 502 || code == 503 || code == 504) && attempts < maxRetries) {
+                    if (backoff > 0) Thread.sleep(backoff);
+                    backoff = Math.min(backoff * 2, 10_000L);
+                    attempts++;
+                    continue;
+                }
+                return response;
+            } catch (Exception e) {
+                if (attempts >= maxRetries) {
+                    if (e instanceof RuntimeException) {
+                        throw (RuntimeException) e;
+                    }
+                    throw new RuntimeException("Request failed after retries: " + e.getMessage(), e);
+                }
+                try {
+                    if (backoff > 0) Thread.sleep(backoff);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    throw new RuntimeException("Retry interrupted", ie);
+                }
+                backoff = Math.min(backoff * 2, 10_000L);
+                attempts++;
+            }
         }
     }
 

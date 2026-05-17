@@ -8,7 +8,8 @@
 
 [![Follow hlquery](https://img.shields.io/badge/Follow-%40hlquery-blue?logo=x&logoColor=white)](https://x.com/hlquery)
 [![Commit Activity](https://img.shields.io/github/commit-activity/m/hlquery/java-api)](https://github.com/hlquery/java-api/pulse)
-[![GitHub](https://img.shields.io/badge/GitHub-java--api-purple?logo=github&logoColor=white)](https://github.com/hlquery/java-api/stargazers)
+[![Java build](https://github.com/hlquery/java-api/actions/workflows/ci.yml/badge.svg)](https://github.com/hlquery/java-api/actions/workflows/ci.yml)
+[![GitHub](https://img.shields.io/badge/GitHub-java--api-181717?logo=github&logoColor=white)](https://github.com/hlquery/java-api/stargazers)
 [![hlquery](https://img.shields.io/badge/GitHub-hlquery-blue?logo=github&logoColor=white)](https://github.com/hlquery/hlquery/stargazers)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
@@ -89,6 +90,11 @@ Response moduleResponse = client.executeRequest(
 
 System.out.println(moduleResponse.getRawBody());
 ```
+
+### TODO
+
+- Add a small typed layer (request/response DTOs) for the most common endpoints.
+- Publish as a proper Maven artifact (use Maven/Gradle dependency management, not `curl`).
 
 ### Contributing
 

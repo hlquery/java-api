@@ -209,4 +209,19 @@ public class Client {
     public Response executeRequest(String method, String path, Object body, Map<String, String> queryParams) {
         return request.execute(method, path, body, queryParams);
     }
+
+    public Response executeRequestSafe(String method, String path, Object body, Map<String, String> queryParams) {
+        return request.executeSafe(method, path, body, queryParams);
+    }
+
+    public Response executeRequestWithRetry(
+            String method,
+            String path,
+            Object body,
+            Map<String, String> queryParams,
+            int maxRetries,
+            long initialBackoffMillis
+    ) {
+        return request.executeWithRetry(method, path, body, queryParams, maxRetries, initialBackoffMillis);
+    }
 }

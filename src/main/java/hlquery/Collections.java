@@ -83,9 +83,12 @@ public class Collections {
         result.put("collection", name);
         result.put("fields", fieldsArray);
         result.put("field_count", fieldsArray.length());
-        result.put("searchable_fields", body.optJSONArray("searchable_fields", new JSONArray()));
-        result.put("filterable_fields", body.optJSONArray("filterable_fields", new JSONArray()));
-        result.put("sortable_fields", body.optJSONArray("sortable_fields", new JSONArray()));
+        JSONArray searchable = body.optJSONArray("searchable_fields");
+        JSONArray filterable = body.optJSONArray("filterable_fields");
+        JSONArray sortable = body.optJSONArray("sortable_fields");
+        result.put("searchable_fields", searchable != null ? searchable : new JSONArray());
+        result.put("filterable_fields", filterable != null ? filterable : new JSONArray());
+        result.put("sortable_fields", sortable != null ? sortable : new JSONArray());
 
         return new Response(200, result.toString(), response.getHeaders());
     }
