@@ -128,6 +128,12 @@ public class Search {
         return request.execute("POST", "/multi_search", body);
     }
 
+    public Response globalSearch(Map<String, Object> params) {
+        boolean post = params != null && params.containsKey("body");
+        Object body = post ? params.get("body") : null;
+        return request.execute(post ? "POST" : "GET", "/search", body, post ? null : toQueryParams(params));
+    }
+
     public Response samSearch(String collectionName, String query, Map<String, Object> params) {
         Validator.validateCollectionName(collectionName);
 
@@ -282,5 +288,17 @@ public class Search {
             return sb.toString();
         }
         return String.valueOf(sort);
+    }
+
+    private Map<String, String> toQueryParams(Map<String, Object> params) {
+        Map<String, String> queryParams = new HashMap<>();
+        if (params != null) {
+            for (Map.Entry<String, Object> entry : params.entrySet()) {
+                if (entry.getValue() != null) {
+                    queryParams.put(entry.getKey(), String.valueOf(entry.getValue()));
+                }
+            }
+        }
+        return queryParams;
     }
 }

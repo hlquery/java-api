@@ -33,16 +33,8 @@ public class Collections {
     public Response create(String name, JSONObject schema) {
         Validator.validateCollectionName(name);
 
-        JSONObject body = new JSONObject();
+        JSONObject body = schema != null ? new JSONObject(schema.toString()) : new JSONObject();
         body.put("name", name);
-
-        if (schema != null) {
-            if (schema.has("fields")) {
-                body.put("fields", schema.get("fields"));
-            } else if (schema.has("searchable_fields")) {
-                body.put("searchable_fields", schema.get("searchable_fields"));
-            }
-        }
 
         return request.execute("POST", "/collections", body);
     }
@@ -91,6 +83,11 @@ public class Collections {
         result.put("sortable_fields", sortable != null ? sortable : new JSONArray());
 
         return new Response(200, result.toString(), response.getHeaders());
+    }
+
+    public Response getLanguage(String name) {
+        Validator.validateCollectionName(name);
+        return request.execute("GET", "/collections/" + URLEncoder.encode(name, StandardCharsets.UTF_8) + "/lang");
     }
 
     private void collectFields(JSONObject body, String key, String type, List<String> allFields, Map<String, List<String>> fieldTypes) {

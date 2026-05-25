@@ -5,6 +5,8 @@ import hlquery.utils.Validator;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,8 +53,96 @@ public class Client {
         return request.execute("GET", "/health");
     }
 
+    public Response ready() {
+        return request.execute("GET", "/ready");
+    }
+
     public Response stats() {
         return request.execute("GET", "/stats");
+    }
+
+    public Response status() {
+        return request.execute("GET", "/status");
+    }
+
+    public Response query() {
+        return request.execute("GET", "/query");
+    }
+
+    public Response startup() {
+        return request.execute("GET", "/startup");
+    }
+
+    public Response bootStatus() {
+        return request.execute("GET", "/boot-status");
+    }
+
+    public Response metrics() {
+        return request.execute("GET", "/metrics");
+    }
+
+    public Response metricsJson() {
+        return request.execute("GET", "/metrics.json");
+    }
+
+    public Response connections() {
+        return request.execute("GET", "/connections");
+    }
+
+    public Response rocksdb() {
+        return request.execute("GET", "/rocksdb");
+    }
+
+    public Response rocksdbInternal() {
+        return request.execute("GET", "/_rocksdb");
+    }
+
+    public Response docTotal() {
+        return request.execute("GET", "/doctotal");
+    }
+
+    public Response ping() {
+        return request.execute("GET", "/ping");
+    }
+
+    public Response integrity() {
+        return request.execute("GET", "/integrity");
+    }
+
+    public Response consistency() {
+        return request.execute("GET", "/consistency");
+    }
+
+    public Response selfCheck() {
+        return request.execute("GET", "/self-check");
+    }
+
+    public Response storageStatus() {
+        return request.execute("GET", "/admin/storage_status");
+    }
+
+    public Response searchConfig() {
+        return request.execute("GET", "/search-config");
+    }
+
+    public Response llm() {
+        return request.execute("GET", "/llm");
+    }
+
+    public Response updateCounters() {
+        return request.execute("GET", "/update-counters");
+    }
+
+    public Response updateCounters(JSONObject body) {
+        return request.execute("POST", "/update-counters", body != null ? body : new JSONObject());
+    }
+
+    public Response repair() {
+        return request.execute("GET", "/repair");
+    }
+
+    public Response repair(JSONObject body) {
+        return request.execute("POST", "/repair", body != null ? body : new JSONObject());
     }
 
     public Response etc() {
@@ -136,6 +226,215 @@ public class Client {
         return request.execute("POST", "/flush");
     }
 
+    public Response listUsers() {
+        return request.execute("GET", "/users");
+    }
+
+    public Response getUser(String id) {
+        validateId(id, "User ID");
+        return request.execute("GET", "/users/" + encode(id));
+    }
+
+    public Response createUser(JSONObject body) {
+        return request.execute("POST", "/users", body);
+    }
+
+    public Response updateUser(String id, JSONObject body) {
+        validateId(id, "User ID");
+        return request.execute("PUT", "/users/" + encode(id), body);
+    }
+
+    public Response deleteUser(String id) {
+        validateId(id, "User ID");
+        return request.execute("DELETE", "/users/" + encode(id));
+    }
+
+    public Response listKeys() {
+        return request.execute("GET", "/keys");
+    }
+
+    public Response getKey(String id) {
+        validateId(id, "Key ID");
+        return request.execute("GET", "/keys/" + encode(id));
+    }
+
+    public Response createKey(JSONObject body) {
+        return request.execute("POST", "/keys", body);
+    }
+
+    public Response updateKey(String id, JSONObject body) {
+        validateId(id, "Key ID");
+        return request.execute("PUT", "/keys/" + encode(id), body);
+    }
+
+    public Response deleteKey(String id) {
+        validateId(id, "Key ID");
+        return request.execute("DELETE", "/keys/" + encode(id));
+    }
+
+    public Response listAliases() {
+        return request.execute("GET", "/aliases");
+    }
+
+    public Response listCollectionAliases(String collectionName) {
+        Validator.validateCollectionName(collectionName);
+        return request.execute("GET", "/collections/" + encode(collectionName) + "/aliases");
+    }
+
+    public Response getAlias(String name) {
+        validateId(name, "Alias name");
+        return request.execute("GET", "/aliases/" + encode(name));
+    }
+
+    public Response createAlias(String name, JSONObject body) {
+        validateId(name, "Alias name");
+        return request.execute("POST", "/aliases/" + encode(name), body);
+    }
+
+    public Response updateAlias(String name, JSONObject body) {
+        validateId(name, "Alias name");
+        return request.execute("PUT", "/aliases/" + encode(name), body);
+    }
+
+    public Response deleteAlias(String name) {
+        validateId(name, "Alias name");
+        return request.execute("DELETE", "/aliases/" + encode(name));
+    }
+
+    public Response listOverrides(String collectionName) {
+        Validator.validateCollectionName(collectionName);
+        return request.execute("GET", "/collections/" + encode(collectionName) + "/overrides");
+    }
+
+    public Response getOverride(String collectionName, String id) {
+        Validator.validateCollectionName(collectionName);
+        Validator.validateDocumentId(id);
+        return request.execute("GET", "/collections/" + encode(collectionName) + "/overrides/" + encode(id));
+    }
+
+    public Response createOverride(String collectionName, String id, JSONObject body) {
+        Validator.validateCollectionName(collectionName);
+        Validator.validateDocumentId(id);
+        return request.execute("POST", "/collections/" + encode(collectionName) + "/overrides/" + encode(id), body);
+    }
+
+    public Response updateOverride(String collectionName, String id, JSONObject body) {
+        Validator.validateCollectionName(collectionName);
+        Validator.validateDocumentId(id);
+        return request.execute("PUT", "/collections/" + encode(collectionName) + "/overrides/" + encode(id), body);
+    }
+
+    public Response deleteOverride(String collectionName, String id) {
+        Validator.validateCollectionName(collectionName);
+        Validator.validateDocumentId(id);
+        return request.execute("DELETE", "/collections/" + encode(collectionName) + "/overrides/" + encode(id));
+    }
+
+    public Response listSynonyms(String collectionName) {
+        Validator.validateCollectionName(collectionName);
+        return request.execute("GET", "/collections/" + encode(collectionName) + "/synonyms");
+    }
+
+    public Response getSynonym(String collectionName, String id) {
+        Validator.validateCollectionName(collectionName);
+        Validator.validateDocumentId(id);
+        return request.execute("GET", "/collections/" + encode(collectionName) + "/synonyms/" + encode(id));
+    }
+
+    public Response createSynonym(String collectionName, String id, JSONObject body) {
+        Validator.validateCollectionName(collectionName);
+        Validator.validateDocumentId(id);
+        return request.execute("POST", "/collections/" + encode(collectionName) + "/synonyms/" + encode(id), body);
+    }
+
+    public Response updateSynonym(String collectionName, String id, JSONObject body) {
+        Validator.validateCollectionName(collectionName);
+        Validator.validateDocumentId(id);
+        return request.execute("PUT", "/collections/" + encode(collectionName) + "/synonyms/" + encode(id), body);
+    }
+
+    public Response deleteSynonym(String collectionName, String id) {
+        Validator.validateCollectionName(collectionName);
+        Validator.validateDocumentId(id);
+        return request.execute("DELETE", "/collections/" + encode(collectionName) + "/synonyms/" + encode(id));
+    }
+
+    public Response listAllSynonyms() {
+        return request.execute("GET", "/synonyms");
+    }
+
+    public Response listGlobalSynonyms() {
+        return request.execute("GET", "/synonyms/global");
+    }
+
+    public Response getGlobalSynonym(String id) {
+        Validator.validateDocumentId(id);
+        return request.execute("GET", "/synonyms/global/" + encode(id));
+    }
+
+    public Response createGlobalSynonym(String id, JSONObject body) {
+        Validator.validateDocumentId(id);
+        return request.execute("POST", "/synonyms/global/" + encode(id), body);
+    }
+
+    public Response updateGlobalSynonym(String id, JSONObject body) {
+        Validator.validateDocumentId(id);
+        return request.execute("PUT", "/synonyms/global/" + encode(id), body);
+    }
+
+    public Response deleteGlobalSynonym(String id) {
+        Validator.validateDocumentId(id);
+        return request.execute("DELETE", "/synonyms/global/" + encode(id));
+    }
+
+    public Response listStopwords(String collectionName) {
+        Validator.validateCollectionName(collectionName);
+        return request.execute("GET", "/collections/" + encode(collectionName) + "/stopwords");
+    }
+
+    public Response createStopword(String collectionName, JSONObject body) {
+        Validator.validateCollectionName(collectionName);
+        return request.execute("POST", "/collections/" + encode(collectionName) + "/stopwords", body);
+    }
+
+    public Response deleteStopword(String collectionName, String word) {
+        Validator.validateCollectionName(collectionName);
+        validateId(word, "Stopword");
+        return request.execute("DELETE", "/collections/" + encode(collectionName) + "/stopwords/" + encode(word));
+    }
+
+    public Response listAllStopwords() {
+        return request.execute("GET", "/stopwords");
+    }
+
+    public Response listGlobalStopwords() {
+        return request.execute("GET", "/stopwords/global");
+    }
+
+    public Response createGlobalStopword(JSONObject body) {
+        return request.execute("POST", "/stopwords/global", body);
+    }
+
+    public Response deleteGlobalStopword(String word) {
+        validateId(word, "Stopword");
+        return request.execute("DELETE", "/stopwords/global/" + encode(word));
+    }
+
+    public Response listModules() {
+        return request.execute("GET", "/modules");
+    }
+
+    public Response moduleSyntax(String name) {
+        validateId(name, "Module name");
+        return request.execute("GET", "/modules/" + encode(name) + "/syntax");
+    }
+
+    public Response moduleCall(String name, String route, String method, Object body, Map<String, String> queryParams) {
+        validateId(name, "Module name");
+        String suffix = (route == null || route.isEmpty()) ? "" : "/" + route.replaceFirst("^/+", "");
+        return request.execute(method != null ? method : "GET", "/modules/" + encode(name) + suffix, body, queryParams);
+    }
+
     // API Instances
     public Collections collections() {
         return collections;
@@ -166,12 +465,32 @@ public class Client {
         return collections.getFields(name);
     }
 
+    public Response getCollectionLanguage(String name) {
+        return collections.getLanguage(name);
+    }
+
     public Response listDocuments(String collectionName, Map<String, Object> params) {
         return documents.list(collectionName, params);
     }
 
     public Response getDocument(String collectionName, String documentId) {
         return documents.get(collectionName, documentId);
+    }
+
+    public Response exportDocuments(String collectionName, Map<String, Object> params) {
+        return documents.export(collectionName, params);
+    }
+
+    public Response facetCounts(String collectionName, Map<String, Object> params) {
+        return documents.facetCounts(collectionName, params);
+    }
+
+    public Response maybe(String collectionName, Map<String, Object> params) {
+        return documents.maybe(collectionName, params);
+    }
+
+    public Response documentContext(String collectionName, String documentId, Map<String, Object> params) {
+        return documents.context(collectionName, documentId, params);
     }
 
     public Response search(String collectionName, Map<String, Object> params) {
@@ -206,6 +525,93 @@ public class Client {
         return search.vectorSearch(collectionName, params);
     }
 
+    public Response globalSearch(Map<String, Object> params) {
+        return search.globalSearch(params);
+    }
+
+    public Response samRebuild(String collectionName) {
+        return samRebuild(collectionName, new HashMap<>());
+    }
+
+    public Response samRebuild(String collectionName, Map<String, Object> params) {
+        Validator.validateCollectionName(collectionName);
+        Map<String, String> queryParams = toQueryParams(params);
+        queryParams.put("collection", collectionName);
+        return request.execute("POST", "/sam/rebuild", null, queryParams);
+    }
+
+    public Response samStatus(String collectionName, Map<String, Object> params) {
+        Map<String, String> queryParams = toQueryParams(params);
+        if (collectionName != null && !collectionName.isEmpty()) {
+            Validator.validateCollectionName(collectionName);
+            queryParams.put("collection", collectionName);
+        }
+        return request.execute("GET", "/sam/status", null, queryParams);
+    }
+
+    public Response samDebug(String collectionName, Map<String, Object> params) {
+        Map<String, String> queryParams = toQueryParams(params);
+        if (collectionName != null && !collectionName.isEmpty()) {
+            Validator.validateCollectionName(collectionName);
+            queryParams.put("collection", collectionName);
+        }
+        return request.execute("GET", "/sam/debug", null, queryParams);
+    }
+
+    public Response samHistory(String collectionName, int limit, Map<String, Object> params) {
+        Map<String, String> queryParams = toQueryParams(params);
+        queryParams.put("limit", String.valueOf(limit));
+        if (collectionName != null && !collectionName.isEmpty()) {
+            Validator.validateCollectionName(collectionName);
+            queryParams.put("collection", collectionName);
+        }
+        return request.execute("GET", "/sam/history", null, queryParams);
+    }
+
+    public Response samPause(long pauseUntilMs) {
+        Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("pause", String.valueOf(pauseUntilMs));
+        return request.execute("POST", "/sam/pause", null, queryParams);
+    }
+
+    public Response samClearPause() {
+        return samPause(0);
+    }
+
+    public Response samImprove(JSONObject body) {
+        return request.execute("POST", "/sam/improve", body != null ? body : new JSONObject());
+    }
+
+    public Response samFlushActorMetadata(JSONObject body) {
+        return request.execute("POST", "/sam/flush_actor_metadata", body != null ? body : new JSONObject());
+    }
+
+    public Response samDocuments(String collectionName, int offset, int limit, Map<String, Object> params) {
+        Validator.validateCollectionName(collectionName);
+        Map<String, String> queryParams = toQueryParams(params);
+        queryParams.put("collection", collectionName);
+        queryParams.put("offset", String.valueOf(offset));
+        queryParams.put("limit", String.valueOf(limit));
+        return request.execute("GET", "/sam/documents", null, queryParams);
+    }
+
+    public Response samDocument(String collectionName, String documentId, Map<String, Object> params) {
+        Validator.validateCollectionName(collectionName);
+        Validator.validateDocumentId(documentId);
+        return request.execute("GET", "/sam/documents/" + encode(collectionName) + "/" + encode(documentId), null, toQueryParams(params));
+    }
+
+    public Response samAddLabel(String collectionName, String documentId, String label, JSONObject body) {
+        Validator.validateCollectionName(collectionName);
+        Validator.validateDocumentId(documentId);
+        validateId(label, "SAM label");
+        return request.execute(
+                "POST",
+                "/sam/label/add/" + encode(collectionName) + "/" + encode(documentId) + "/" + encode(label),
+                body != null ? body : new JSONObject()
+        );
+    }
+
     public Response executeRequest(String method, String path, Object body, Map<String, String> queryParams) {
         return request.execute(method, path, body, queryParams);
     }
@@ -223,5 +629,27 @@ public class Client {
             long initialBackoffMillis
     ) {
         return request.executeWithRetry(method, path, body, queryParams, maxRetries, initialBackoffMillis);
+    }
+
+    private String encode(String value) {
+        return URLEncoder.encode(value, StandardCharsets.UTF_8);
+    }
+
+    private void validateId(String value, String label) {
+        if (value == null || value.trim().isEmpty()) {
+            throw new IllegalArgumentException(label + " must be a non-empty string");
+        }
+    }
+
+    private Map<String, String> toQueryParams(Map<String, Object> params) {
+        Map<String, String> queryParams = new HashMap<>();
+        if (params != null) {
+            for (Map.Entry<String, Object> entry : params.entrySet()) {
+                if (entry.getValue() != null) {
+                    queryParams.put(entry.getKey(), String.valueOf(entry.getValue()));
+                }
+            }
+        }
+        return queryParams;
     }
 }

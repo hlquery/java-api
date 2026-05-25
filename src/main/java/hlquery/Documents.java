@@ -64,10 +64,58 @@ public class Documents {
         return request.execute("POST", "/collections/" + URLEncoder.encode(collectionName, StandardCharsets.UTF_8) + "/documents/import", body);
     }
 
+    public Response facetCounts(String collectionName, Map<String, Object> params) {
+        return collectionDocumentQuery(collectionName, "facet_counts", params);
+    }
+
+    public Response maybe(String collectionName, Map<String, Object> params) {
+        return collectionDocumentQuery(collectionName, "maybe", params);
+    }
+
+    public Response export(String collectionName, Map<String, Object> params) {
+        return collectionDocumentQuery(collectionName, "export", params);
+    }
+
+    public Response context(String collectionName, String documentId, Map<String, Object> params) {
+        Validator.validateCollectionName(collectionName);
+        Validator.validateDocumentId(documentId);
+        return request.execute(
+                "GET",
+                "/collections/" + URLEncoder.encode(collectionName, StandardCharsets.UTF_8)
+                        + "/documents/" + URLEncoder.encode(documentId, StandardCharsets.UTF_8) + "/context",
+                null,
+                toQueryParams(params)
+        );
+    }
+
     public Response deleteByFilter(String collectionName, String filter) {
         Validator.validateCollectionName(collectionName);
         Map<String, String> queryParams = new HashMap<>();
         queryParams.put("filter_by", filter);
         return request.execute("DELETE", "/collections/" + URLEncoder.encode(collectionName, StandardCharsets.UTF_8) + "/documents", null, queryParams);
+    }
+
+    private Response collectionDocumentQuery(String collectionName, String route, Map<String, Object> params) {
+        Validator.validateCollectionName(collectionName);
+        boolean post = params != null && params.containsKey("body");
+        Object body = post ? params.get("body") : null;
+        return request.execute(
+                post ? "POST" : "GET",
+                "/collections/" + URLEncoder.encode(collectionName, StandardCharsets.UTF_8) + "/documents/" + route,
+                body,
+                post ? null : toQueryParams(params)
+        );
+    }
+
+    private Map<String, String> toQueryParams(Map<String, Object> params) {
+        Map<String, String> queryParams = new HashMap<>();
+        if (params != null) {
+            for (Map.Entry<String, Object> entry : params.entrySet()) {
+                if (entry.getValue() != null) {
+                    queryParams.put(entry.getKey(), String.valueOf(entry.getValue()));
+                }
+            }
+        }
+        return queryParams;
     }
 }

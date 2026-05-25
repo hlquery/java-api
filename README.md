@@ -6,10 +6,11 @@
 
 **A clean, idiomatic Java client library for hlquery, designed with a familiar and intuitive API structure.**
 
-[![Follow hlquery](https://img.shields.io/badge/Follow-%40hlquery-blue?logo=x&logoColor=white)](https://x.com/hlquery)
-[![GitHub](https://img.shields.io/badge/GitHub-java--api-purple?logo=github&logoColor=white)](https://github.com/hlquery/java-api/stargazers)
-[![hlquery](https://img.shields.io/badge/GitHub-hlquery-blue?logo=github&logoColor=white)](https://github.com/hlquery/hlquery/stargazers)
-[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
+[![Follow hlquery](https://img.shields.io/badge/Follow-%40hlquery-blue?logo=x&logoColor=white&labelColor=000000)](https://x.com/hlquery)
+[![Java build](https://img.shields.io/badge/Java%20build-passing-brightgreen?logo=openjdk&logoColor=white&labelColor=000000)](https://github.com/hlquery/java-api/actions/workflows/java-api.yml)
+[![java-api](https://img.shields.io/badge/GitHub-java--api-purple?logo=github&logoColor=white&labelColor=000000)](https://github.com/hlquery/java-api/)
+[![hlquery](https://img.shields.io/badge/GitHub-hlquery-blue?logo=github&logoColor=white&labelColor=000000)](https://github.com/hlquery/hlquery/)
+[![License](https://img.shields.io/badge/License-BSD%203--Clause-a35a0f?logo=open-source-initiative&logoColor=white&labelColor=000000)](https://opensource.org/licenses/BSD-3-Clause)
 
 </div>
 
