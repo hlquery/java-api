@@ -22,14 +22,7 @@ It is intended for JVM services, tools, and applications that want a straightfor
 
 ### Why use it?
 
-- Familiar client layout for Java applications.
-- Response objects for status checks and raw body access.
-- Coverage for the main hlquery endpoint families.
-- Simple path for both high-level helpers and raw requests.
-
-### Why choose it over raw HTTP?
-
-Choose the Java client over raw HTTP when you want less repetitive URL, auth, and request-body code, one client entry point for day-to-day hlquery tasks, and a simpler way to keep request formatting and error handling consistent.
+The Java API gives Java applications a familiar client layout, response objects for status checks and raw body access, coverage for the main hlquery endpoint families, and a simple path for both high-level helpers and raw requests.
 
 ### Install
 
@@ -67,10 +60,17 @@ Response products = client.sqlSearch(
     "products",
     "SELECT id, title, price FROM products ORDER BY price DESC LIMIT 3;"
 );
+Response insert = client.sqlWrite(
+    "INSERT INTO products (id, title, price) VALUES ('sku-4', 'Desk Lamp', 49);"
+);
+Response delete = client.sqlExec("DELETE FROM products WHERE id = 'sku-4';");
+Response drop = client.sqlPost("DROP COLLECTION old_products;");
 
 System.out.println(rows.getRawBody());
 System.out.println(products.getRawBody());
 ```
+
+The SQL helpers cover top-level SQL (`client.sql`, `client.sqlPost`, `client.sqlExec`, `client.sqlSelect`, `client.sqlWrite`) and collection-bound SQL search (`client.sqlSearch`, `client.sqlSearchPost`). Use top-level SQL for `SHOW COLLECTIONS`, `INSERT`, `DELETE`, and `DROP`; use collection-bound SQL for `SELECT` queries tied to one collection.
 
 ### Reduce Text Example
 

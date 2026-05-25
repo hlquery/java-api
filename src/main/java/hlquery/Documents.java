@@ -95,6 +95,29 @@ public class Documents {
         return request.execute("DELETE", "/collections/" + URLEncoder.encode(collectionName, StandardCharsets.UTF_8) + "/documents", null, queryParams);
     }
 
+    public Response deleteAll(String collectionName) {
+        Validator.validateCollectionName(collectionName);
+        return request.execute("DELETE", "/collections/" + URLEncoder.encode(collectionName, StandardCharsets.UTF_8) + "/documents");
+    }
+
+    public Response updateByQuery(String collectionName, JSONObject body) {
+        Validator.validateCollectionName(collectionName);
+        return request.execute(
+                "POST",
+                "/collections/" + URLEncoder.encode(collectionName, StandardCharsets.UTF_8) + "/documents/_update_by_query",
+                body != null ? body : new JSONObject()
+        );
+    }
+
+    public Response deleteByQuery(String collectionName, JSONObject body) {
+        Validator.validateCollectionName(collectionName);
+        return request.execute(
+                "POST",
+                "/collections/" + URLEncoder.encode(collectionName, StandardCharsets.UTF_8) + "/documents/_delete_by_query",
+                body != null ? body : new JSONObject()
+        );
+    }
+
     private Response collectionDocumentQuery(String collectionName, String route, Map<String, Object> params) {
         Validator.validateCollectionName(collectionName);
         boolean post = params != null && params.containsKey("body");

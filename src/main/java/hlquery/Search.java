@@ -44,6 +44,30 @@ public class Search {
         );
     }
 
+    public Response sqlPost(String collectionName, String sql, Map<String, Object> params) {
+        Validator.validateCollectionName(collectionName);
+
+        if (sql == null || sql.trim().isEmpty()) {
+            throw new IllegalArgumentException("SQL query must be a non-empty string");
+        }
+
+        JSONObject body = new JSONObject();
+        if (params != null) {
+            for (Map.Entry<String, Object> entry : params.entrySet()) {
+                if (entry.getValue() != null) {
+                    body.put(entry.getKey(), entry.getValue());
+                }
+            }
+        }
+        body.put("sql", sql);
+
+        return request.execute(
+                "POST",
+                "/collections/" + URLEncoder.encode(collectionName, StandardCharsets.UTF_8) + "/documents/search",
+                body
+        );
+    }
+
     public Response search(String collectionName, Map<String, Object> params) {
         Validator.validateCollectionName(collectionName);
         
@@ -126,6 +150,10 @@ public class Search {
         JSONObject body = new JSONObject();
         body.put("searches", searches);
         return request.execute("POST", "/multi_search", body);
+    }
+
+    public Response multiSearch(JSONObject body) {
+        return request.execute("POST", "/multi_search", body != null ? body : new JSONObject());
     }
 
     public Response globalSearch(Map<String, Object> params) {

@@ -85,6 +85,14 @@ public class Client {
         return request.execute("GET", "/metrics.json");
     }
 
+    public Response metricsHistory() {
+        return request.execute("GET", "/metrics/history");
+    }
+
+    public Response metricsHistoryAlias() {
+        return request.execute("GET", "/metrics-history");
+    }
+
     public Response connections() {
         return request.execute("GET", "/connections");
     }
@@ -137,6 +145,10 @@ public class Client {
         return request.execute("POST", "/update-counters", body != null ? body : new JSONObject());
     }
 
+    public Response debugCounters() {
+        return request.execute("GET", "/debug/counters");
+    }
+
     public Response repair() {
         return request.execute("GET", "/repair");
     }
@@ -174,6 +186,39 @@ public class Client {
         JSONObject body = new JSONObject();
         body.put("exec", sql);
         return request.execute("POST", "/sql", body);
+    }
+
+    public Response sqlPost(String sql) {
+        return sqlPost(sql, new HashMap<>());
+    }
+
+    public Response sqlPost(String sql, Map<String, Object> params) {
+        if (sql == null || sql.trim().isEmpty()) {
+            throw new IllegalArgumentException("SQL query must be a non-empty string");
+        }
+
+        JSONObject body = new JSONObject();
+        if (params != null) {
+            for (Map.Entry<String, Object> entry : params.entrySet()) {
+                if (entry.getValue() != null) {
+                    body.put(entry.getKey(), entry.getValue());
+                }
+            }
+        }
+        body.put("sql", sql);
+        return request.execute("POST", "/sql", body);
+    }
+
+    public Response sqlExec(String sql) {
+        return execSql(sql);
+    }
+
+    public Response sqlSelect(String sql) {
+        return sql(sql);
+    }
+
+    public Response sqlWrite(String sql) {
+        return sqlPost(sql);
     }
 
     public Response info() {
@@ -424,6 +469,26 @@ public class Client {
         return request.execute("GET", "/modules");
     }
 
+    public Response loadModule(String name) {
+        validateId(name, "Module name");
+        return request.execute("POST", "/modules/load/" + encode(name), new JSONObject());
+    }
+
+    public Response unloadModule(String name) {
+        validateId(name, "Module name");
+        return request.execute("POST", "/modules/unload/" + encode(name), new JSONObject());
+    }
+
+    public Response loadModuleLegacy(String name) {
+        validateId(name, "Module name");
+        return request.execute("POST", "/loadmodule/" + encode(name), new JSONObject());
+    }
+
+    public Response unloadModuleLegacy(String name) {
+        validateId(name, "Module name");
+        return request.execute("POST", "/unloadmodule/" + encode(name), new JSONObject());
+    }
+
     public Response moduleSyntax(String name) {
         validateId(name, "Module name");
         return request.execute("GET", "/modules/" + encode(name) + "/syntax");
@@ -481,6 +546,18 @@ public class Client {
         return documents.export(collectionName, params);
     }
 
+    public Response deleteAllDocuments(String collectionName) {
+        return documents.deleteAll(collectionName);
+    }
+
+    public Response updateByQuery(String collectionName, JSONObject body) {
+        return documents.updateByQuery(collectionName, body);
+    }
+
+    public Response deleteByQuery(String collectionName, JSONObject body) {
+        return documents.deleteByQuery(collectionName, body);
+    }
+
     public Response facetCounts(String collectionName, Map<String, Object> params) {
         return documents.facetCounts(collectionName, params);
     }
@@ -521,12 +598,32 @@ public class Client {
         return search.sql(collectionName, sql, params);
     }
 
+    public Response sqlSearchPost(String collectionName, String sql) {
+        return sqlSearchPost(collectionName, sql, new HashMap<>());
+    }
+
+    public Response sqlSearchPost(String collectionName, String sql, Map<String, Object> params) {
+        return search.sqlPost(collectionName, sql, params);
+    }
+
     public Response vectorSearch(String collectionName, Map<String, Object> params) {
         return search.vectorSearch(collectionName, params);
     }
 
     public Response globalSearch(Map<String, Object> params) {
         return search.globalSearch(params);
+    }
+
+    public Response multiSearch(JSONArray searches) {
+        return search.multiSearch(searches);
+    }
+
+    public Response multiSearch(JSONObject body) {
+        return search.multiSearch(body);
+    }
+
+    public Response analyticsClick(JSONObject body) {
+        return request.execute("POST", "/analytics/click", body != null ? body : new JSONObject());
     }
 
     public Response samRebuild(String collectionName) {
