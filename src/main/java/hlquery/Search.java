@@ -162,48 +162,6 @@ public class Search {
         return request.execute(post ? "POST" : "GET", "/search", body, post ? null : toQueryParams(params));
     }
 
-    public Response samSearch(String collectionName, String query, Map<String, Object> params) {
-        Validator.validateCollectionName(collectionName);
-
-        if (query == null || query.trim().isEmpty()) {
-            throw new IllegalArgumentException("SAM query must be a non-empty string");
-        }
-
-        Map<String, String> queryParams = new HashMap<>();
-        queryParams.put("collection", collectionName);
-        queryParams.put("q", query);
-
-        if (params != null) {
-            for (Map.Entry<String, Object> entry : params.entrySet()) {
-                if (entry.getValue() != null) {
-                    queryParams.put(entry.getKey(), String.valueOf(entry.getValue()));
-                }
-            }
-        }
-
-        return request.execute("GET", "/sam/search", null, queryParams);
-    }
-
-    public Response samSearchAll(String query, Map<String, Object> params) {
-        if (query == null || query.trim().isEmpty()) {
-            throw new IllegalArgumentException("SAM query must be a non-empty string");
-        }
-
-        Map<String, String> queryParams = new HashMap<>();
-        queryParams.put("q", query);
-        queryParams.put("all", "true");
-
-        if (params != null) {
-            for (Map.Entry<String, Object> entry : params.entrySet()) {
-                if (entry.getValue() != null) {
-                    queryParams.put(entry.getKey(), String.valueOf(entry.getValue()));
-                }
-            }
-        }
-
-        return request.execute("GET", "/sam/search", null, queryParams);
-    }
-
     public Response vectorSearch(String collectionName, Map<String, Object> params) {
         Validator.validateCollectionName(collectionName);
         Map<String, String> queryParams = new HashMap<>();

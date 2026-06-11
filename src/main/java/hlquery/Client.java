@@ -574,22 +574,6 @@ public class Client {
         return search.search(collectionName, params);
     }
 
-    public Response samSearch(String collectionName, String query) {
-        return samSearch(collectionName, query, new HashMap<>());
-    }
-
-    public Response samSearch(String collectionName, String query, Map<String, Object> params) {
-        return search.samSearch(collectionName, query, params);
-    }
-
-    public Response samSearchAll(String query) {
-        return samSearchAll(query, new HashMap<>());
-    }
-
-    public Response samSearchAll(String query, Map<String, Object> params) {
-        return search.samSearchAll(query, params);
-    }
-
     public Response sqlSearch(String collectionName, String sql) {
         return sqlSearch(collectionName, sql, new HashMap<>());
     }
@@ -624,89 +608,6 @@ public class Client {
 
     public Response analyticsClick(JSONObject body) {
         return request.execute("POST", "/analytics/click", body != null ? body : new JSONObject());
-    }
-
-    public Response samRebuild(String collectionName) {
-        return samRebuild(collectionName, new HashMap<>());
-    }
-
-    public Response samRebuild(String collectionName, Map<String, Object> params) {
-        Validator.validateCollectionName(collectionName);
-        Map<String, String> queryParams = toQueryParams(params);
-        queryParams.put("collection", collectionName);
-        return request.execute("POST", "/sam/rebuild", null, queryParams);
-    }
-
-    public Response samStatus(String collectionName, Map<String, Object> params) {
-        Map<String, String> queryParams = toQueryParams(params);
-        if (collectionName != null && !collectionName.isEmpty()) {
-            Validator.validateCollectionName(collectionName);
-            queryParams.put("collection", collectionName);
-        }
-        return request.execute("GET", "/sam/status", null, queryParams);
-    }
-
-    public Response samDebug(String collectionName, Map<String, Object> params) {
-        Map<String, String> queryParams = toQueryParams(params);
-        if (collectionName != null && !collectionName.isEmpty()) {
-            Validator.validateCollectionName(collectionName);
-            queryParams.put("collection", collectionName);
-        }
-        return request.execute("GET", "/sam/debug", null, queryParams);
-    }
-
-    public Response samHistory(String collectionName, int limit, Map<String, Object> params) {
-        Map<String, String> queryParams = toQueryParams(params);
-        queryParams.put("limit", String.valueOf(limit));
-        if (collectionName != null && !collectionName.isEmpty()) {
-            Validator.validateCollectionName(collectionName);
-            queryParams.put("collection", collectionName);
-        }
-        return request.execute("GET", "/sam/history", null, queryParams);
-    }
-
-    public Response samPause(long pauseUntilMs) {
-        Map<String, String> queryParams = new HashMap<>();
-        queryParams.put("pause", String.valueOf(pauseUntilMs));
-        return request.execute("POST", "/sam/pause", null, queryParams);
-    }
-
-    public Response samClearPause() {
-        return samPause(0);
-    }
-
-    public Response samImprove(JSONObject body) {
-        return request.execute("POST", "/sam/improve", body != null ? body : new JSONObject());
-    }
-
-    public Response samFlushActorMetadata(JSONObject body) {
-        return request.execute("POST", "/sam/flush_actor_metadata", body != null ? body : new JSONObject());
-    }
-
-    public Response samDocuments(String collectionName, int offset, int limit, Map<String, Object> params) {
-        Validator.validateCollectionName(collectionName);
-        Map<String, String> queryParams = toQueryParams(params);
-        queryParams.put("collection", collectionName);
-        queryParams.put("offset", String.valueOf(offset));
-        queryParams.put("limit", String.valueOf(limit));
-        return request.execute("GET", "/sam/documents", null, queryParams);
-    }
-
-    public Response samDocument(String collectionName, String documentId, Map<String, Object> params) {
-        Validator.validateCollectionName(collectionName);
-        Validator.validateDocumentId(documentId);
-        return request.execute("GET", "/sam/documents/" + encode(collectionName) + "/" + encode(documentId), null, toQueryParams(params));
-    }
-
-    public Response samAddLabel(String collectionName, String documentId, String label, JSONObject body) {
-        Validator.validateCollectionName(collectionName);
-        Validator.validateDocumentId(documentId);
-        validateId(label, "SAM label");
-        return request.execute(
-                "POST",
-                "/sam/label/add/" + encode(collectionName) + "/" + encode(documentId) + "/" + encode(label),
-                body != null ? body : new JSONObject()
-        );
     }
 
     public Response executeRequest(String method, String path, Object body, Map<String, String> queryParams) {
