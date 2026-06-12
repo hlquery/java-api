@@ -133,10 +133,6 @@ public class Client {
         return request.execute("GET", "/search-config");
     }
 
-    public Response llm() {
-        return request.execute("GET", "/llm");
-    }
-
     public Response updateCounters() {
         return request.execute("GET", "/update-counters");
     }
