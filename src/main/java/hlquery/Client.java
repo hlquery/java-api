@@ -222,15 +222,15 @@ public class Client {
     }
 
     public Response clusterHealth() {
-        return request.execute("GET", "/cluster/health");
+        return health();
     }
 
     public Response clusterStats() {
-        return request.execute("GET", "/cluster/stats");
+        return stats();
     }
 
     public Response clusterNodes() {
-        return request.execute("GET", "/cluster/nodes");
+        return links();
     }
 
     public Response links() {
