@@ -85,13 +85,19 @@ We welcome contributions from the community! All contributions must be released 
 
 ### How to Contribute
 
-- Check existing [issues](https://github.com/hlquery/hlquery/issues) or create new ones
-- Contribute to client libraries (Node.js, Go, Java, Python, PHP, Ruby, Rust, Perl, C++)
-- Test and report bugs
-- Improve documentation
+- Check existing [Java API issues](https://github.com/hlquery/java-api/issues) or create new ones
+- Contribute Java client changes to [hlquery/java-api](https://github.com/hlquery/java-api)
+- Contribute shared server/API changes to [hlquery/hlquery](https://github.com/hlquery/hlquery)
+- Test and report bugs against the Java client
+- Improve Java-specific documentation and examples
 
 ### Community
 
-- 📖 [Documentation](https://docs.hlquery.com)
-- 🐦 [X (Twitter)](https://x.com/hlquery)
-- 📦 [GitHub](https://github.com/hlquery/hlquery)
+- [Documentation](https://docs.hlquery.com)
+- [X (Twitter)](https://x.com/hlquery)
+- [Java API GitHub](https://github.com/hlquery/java-api)
+- [hlquery GitHub](https://github.com/hlquery/hlquery)
+
+### License
+
+The hlquery Java API is licensed under the [BSD 3-Clause License](https://opensource.org/licenses/BSD-3-Clause).
