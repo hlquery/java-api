@@ -475,22 +475,30 @@ public class Client {
 
     public Response loadModule(String name) {
         validateId(name, "Module name");
-        return request.execute("POST", "/modules/load/" + encode(name), new JSONObject());
+        return request.execute("POST", "/loadmodule/" + encode(name), new JSONObject());
     }
 
     public Response unloadModule(String name) {
+        validateId(name, "Module name");
+        return request.execute("POST", "/unloadmodule/" + encode(name), new JSONObject());
+    }
+
+    public Response loadModuleAlias(String name) {
+        validateId(name, "Module name");
+        return request.execute("POST", "/modules/load/" + encode(name), new JSONObject());
+    }
+
+    public Response unloadModuleAlias(String name) {
         validateId(name, "Module name");
         return request.execute("POST", "/modules/unload/" + encode(name), new JSONObject());
     }
 
     public Response loadModuleLegacy(String name) {
-        validateId(name, "Module name");
-        return request.execute("POST", "/loadmodule/" + encode(name), new JSONObject());
+        return loadModule(name);
     }
 
     public Response unloadModuleLegacy(String name) {
-        validateId(name, "Module name");
-        return request.execute("POST", "/unloadmodule/" + encode(name), new JSONObject());
+        return unloadModule(name);
     }
 
     public Response moduleSyntax(String name) {
