@@ -93,6 +93,10 @@ public class Client {
         return request.execute("GET", "/metrics-history");
     }
 
+    public Response cache() {
+        return request.execute("GET", "/cache");
+    }
+
     public Response connections() {
         return request.execute("GET", "/connections");
     }
@@ -131,6 +135,10 @@ public class Client {
 
     public Response searchConfig() {
         return request.execute("GET", "/search-config");
+    }
+
+    public Response configFiles() {
+        return request.execute("GET", "/config-files");
     }
 
     public Response updateCounters() {
