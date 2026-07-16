@@ -162,6 +162,11 @@ public class Search {
         return request.execute(post ? "POST" : "GET", "/search", body, post ? null : toQueryParams(params));
     }
 
+    /** Alias for globalSearch: search a merged result set across collections. */
+    public Response searchAll(Map<String, Object> params) {
+        return globalSearch(params);
+    }
+
     public Response vectorSearch(String collectionName, Map<String, Object> params) {
         Validator.validateCollectionName(collectionName);
         Map<String, String> queryParams = new HashMap<>();

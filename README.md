@@ -91,6 +91,15 @@ We welcome contributions from the community! All contributions must be released 
 - Test and report bugs against the Java client
 - Improve Java-specific documentation and examples
 
+### Search all collections
+
+```java
+Response result = client.searchAll(Map.of("q", "research", "limit", 20));
+Response selected = client.searchAll(Map.of("q", "research", "collections", "universities,science"));
+```
+
+`globalSearch` remains available as an equivalent name. Results are globally merged and each hit includes `document._collection`.
+
 ### Community
 
 - 📖 [Documentation](https://docs.hlquery.com)

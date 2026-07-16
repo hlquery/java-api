@@ -469,6 +469,34 @@ public class Client {
         return request.execute("DELETE", "/stopwords/global/" + encode(word));
     }
 
+    public Response listPresets() {
+        return request.execute("GET", "/presets");
+    }
+
+    public Response getPreset(String name) {
+        validateId(name, "Preset name");
+        return request.execute("GET", "/presets/" + encode(name));
+    }
+
+    public Response createPreset(String name, JSONObject body) {
+        validateId(name, "Preset name");
+        return request.execute("POST", "/presets/" + encode(name), body != null ? body : new JSONObject());
+    }
+
+    public Response updatePreset(String name, JSONObject body) {
+        validateId(name, "Preset name");
+        return request.execute("PUT", "/presets/" + encode(name), body != null ? body : new JSONObject());
+    }
+
+    public Response upsertPreset(String name, JSONObject body) {
+        return updatePreset(name, body);
+    }
+
+    public Response deletePreset(String name) {
+        validateId(name, "Preset name");
+        return request.execute("DELETE", "/presets/" + encode(name));
+    }
+
     public Response listModules() {
         return request.execute("GET", "/modules");
     }
@@ -610,6 +638,10 @@ public class Client {
         return search.globalSearch(params);
     }
 
+    public Response searchAll(Map<String, Object> params) {
+        return search.searchAll(params);
+    }
+
     public Response multiSearch(JSONArray searches) {
         return search.multiSearch(searches);
     }
@@ -642,7 +674,9 @@ public class Client {
     }
 
     private String encode(String value) {
-        return URLEncoder.encode(value, StandardCharsets.UTF_8);
+        // URLEncoder targets form data and emits '+' for spaces. Path segments
+        // require percent-encoding so names round-trip without changing value.
+        return URLEncoder.encode(value, StandardCharsets.UTF_8).replace("+", "%20");
     }
 
     private void validateId(String value, String label) {
